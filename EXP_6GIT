@@ -1,0 +1,91 @@
+# Medical Equipment Rental System
+
+class Equipment:
+    def __init__(self, name, total_quantity):
+        self.name = name
+        self.total_quantity = total_quantity
+        self.rented_quantity = 0
+
+    def available_quantity(self):
+        return self.total_quantity - self.rented_quantity
+
+    def rent(self):
+        if self.available_quantity() > 0:
+            self.rented_quantity += 1
+            return True
+        return False
+
+    def return_item(self):
+        if self.rented_quantity > 0:
+            self.rented_quantity -= 1
+            return True
+        return False
+
+
+class RentalSystem:
+    def __init__(self):
+        self.equipment_list = {}
+
+    def add_equipment(self, name, quantity):
+        self.equipment_list[name] = Equipment(name, quantity)
+
+    def view_equipment(self):
+        print("\n Available Medical Equipment:")
+        for name, eq in self.equipment_list.items():
+            print(f"- {name}: {eq.available_quantity()} available (Total: {eq.total_quantity})")
+
+    def rent_equipment(self, name):
+        if name in self.equipment_list:
+            success = self.equipment_list[name].rent()
+            if success:
+                print(f" {name} rented successfully.")
+            else:
+                print(f" {name} is currently out of stock.")
+        else:
+            print(" Equipment not found.")
+
+    def return_equipment(self, name):
+        if name in self.equipment_list:
+            success = self.equipment_list[name].return_item()
+            if success:
+                print(f" {name} returned successfully.")
+            else:
+                print(f" No {name} is currently rented.")
+        else:
+            print(" Equipment not found.")
+
+
+def main():
+    system = RentalSystem()
+    
+    # Add some initial equipment
+    system.add_equipment("Wheelchair", 5)
+    system.add_equipment("Oxygen Cylinder", 3)
+    system.add_equipment("Hospital Bed", 2)
+    system.add_equipment("Walker", 4)
+
+    while True:
+        print("\n=== Medical Equipment Rental System ===")
+        print("1. View Equipment")
+        print("2. Rent Equipment")
+        print("3. Return Equipment")
+        print("4. Exit")
+        choice = input("Choose an option (1-4): ")
+
+        if choice == '1':
+            system.view_equipment()
+        elif choice == '2':
+            name = input("Enter equipment name to rent: ")
+            system.rent_equipment(name)
+        elif choice == '3':
+            name = input("Enter equipment name to return: ")
+            system.return_equipment(name)
+        elif choice == '4':
+            print(" Exiting... Thank you!")
+            break
+        else:
+            print(" Invalid choice. Try again.")
+
+if __name__ == "__main__":
+    main()
+
